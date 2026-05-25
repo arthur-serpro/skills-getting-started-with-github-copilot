@@ -19,12 +19,13 @@ document.addEventListener("DOMContentLoaded", () => {
         activityCard.className = "activity-card";
 
         const spotsLeft = details.max_participants - details.participants.length;
+        const isFull = spotsLeft <= 0;
 
         activityCard.innerHTML = `
           <h4>${name}</h4>
           <p>${details.description}</p>
           <p><strong>Schedule:</strong> ${details.schedule}</p>
-          <p><strong>Availability:</strong> ${spotsLeft} spots left</p>
+          <p><strong>Availability:</strong> ${isFull ? "Full" : `${spotsLeft} spots left`}</p>
         `;
 
         activitiesList.appendChild(activityCard);
@@ -32,7 +33,10 @@ document.addEventListener("DOMContentLoaded", () => {
         // Add option to select dropdown
         const option = document.createElement("option");
         option.value = name;
-        option.textContent = name;
+        option.textContent = `${name}${isFull ? " (Full)" : ""}`;
+        if (isFull) {
+          option.disabled = true;
+        }
         activitySelect.appendChild(option);
       });
     } catch (error) {
